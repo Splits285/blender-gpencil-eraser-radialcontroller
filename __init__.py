@@ -4,7 +4,7 @@ bl_info = {
     "name": "Eraser Radial Controller",
     "description": "Controls the size of the gpencil eraser like a radial control. Because blender won't give a data path for it to be targeted outside of eraser mode. Set a keymap for gp.radialeraser to use",
     "author": "Splits285",
-    "version": (0, 0, 1),
+    "version": (0, 0, 2),
     "blender": (3, 0, 0),
     "location": "Keymaps. Bind an option for gp.radialeraser",
     #"warning": "",
@@ -21,9 +21,11 @@ import blf
 # https://blender.stackexchange.com/questions/244572/how-to-write-text-in-the-3d-viewport-as-statistics-does
 def draw_callback_px(self, context):
     font_id = 0 #default blender system font. This could be a TTF.
-    blf.position(font_id, 15, 100, 0)
+    blf.enable(font_id, 5)
+    blf.shadow(font_id, 5, 1, 1, 1, 1)
+    blf.position(font_id, 100, 200, 0)
     blf.size(font_id, 50)
-    blf.color(font_id, 1, 1, 1, 1)
+    blf.color(font_id, 0, 0, 0, 1)
     blf.draw(font_id, "Eraser size: " + str(bpy.app.driver_namespace['newAMT']) )
 
 class Radialeraser(bpy.types.Operator):
@@ -74,7 +76,7 @@ class Radialeraser(bpy.types.Operator):
 
         #######################################################
         
-        print("invogue by ",event.type, event.value)
+        #print("invogue by ",event.type, event.value)
         global TRIGGERKEY
         TRIGGERKEY = event.type
         
@@ -106,8 +108,8 @@ class Radialeraser(bpy.types.Operator):
             if changePercentage < -1:
                 changePercentage = -1
         changeAMT = round(changePercentage * self.ER_maxDifference)
-        print("Percentage", changePercentage)
-        print("Suggusting change of ", changeAMT)
+        #print("Percentage", changePercentage)
+        #print("Suggusting change of ", changeAMT)
         bpy.app.driver_namespace['changeAMT'] = changeAMT
         bpy.app.driver_namespace['newAMT'] = changeAMT + bpy.context.tool_settings.gpencil_paint.brush.size
                 
@@ -117,34 +119,34 @@ class Radialeraser(bpy.types.Operator):
         
         if event.type == "MOUSEMOVE":
             self.mouse_pos = event.mouse_region_x, event.mouse_region_y
-            print("MOUSEMOVE AT ",event.mouse_region_y)
-            print("Diff: ",Difference)
+            #print("MOUSEMOVE AT ",event.mouse_region_y)
+            #print("Diff: ",Difference)
             
         if event.value == 'RELEASE':
-            print("new-Y = ", bpy.app.driver_namespace['Sy'])
-            print("initial-Y : ",initialY)
-            print("Difference (Sy - initialY):",Difference)
+            #print("new-Y = ", bpy.app.driver_namespace['Sy'])
+            #print("initial-Y : ",initialY)
+            #print("Difference (Sy - initialY):",Difference)
                     
-            #working y is bigger
-            if initialY > Sy:
-                print("initial Y is smaller...                     vvvvvvvvvvvv")
-            
-            #working y is smaller
-            if initialY < Sy:
-                print("initial Y is BIGGER...            ^^^^^^^^^^^^^^^")
-                
-            print('FINISHED AFTER CALCULATIONS')
-            print('APPLYING SIZE CHANGE')
+            ##working y is bigger
+            #if initialY > Sy:
+            #    print("initial Y is smaller...                     vvvvvvvvvvvv")
+            #
+            ##working y is smaller
+            #if initialY < Sy:
+            #    print("initial Y is BIGGER...            ^^^^^^^^^^^^^^^")
+            #    
+            #print('FINISHED AFTER CALCULATIONS')
+            #print('APPLYING SIZE CHANGE')
             bpy.context.tool_settings.gpencil_paint.brush.size = bpy.app.driver_namespace['newAMT']
-            print('REMOVING TEXT HANDLER')
+            #print('REMOVING TEXT HANDLER')
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
-            print('RESTORING TOOL')
+            #print('RESTORING TOOL')
             bpy.ops.wm.tool_set_by_id(name=bpy.app.driver_namespace['Basetool'])
             return {'FINISHED'}
                 
 
         elif event.type == 'ESC':  # Capture exit event
-            print("Cancelled. Removing text handler, restoring tool")
+            #print("Cancelled. Removing text handler, restoring tool")
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
             bpy.ops.wm.tool_set_by_id(name=bpy.app.driver_namespace['Basetool'])
             return {'CANCELLED'}
@@ -160,7 +162,6 @@ def register():
     bpy.app.driver_namespace['Diff'] = 0
     bpy.app.driver_namespace['initialY'] = 0
     bpy.app.driver_namespace['Sy'] = 0
-    bpy.app.driver_namespace['HELD'] = 0
 
 def unregister():
     bpy.utils.unregister_class(Radialeraser)
@@ -170,9 +171,8 @@ def unregister():
     del bpy.app.driver_namespace['Diff']
     del bpy.app.driver_namespace['initialY']
     del bpy.app.driver_namespace['Sy']
-    del bpy.app.driver_namespace['HELD']
 
 if __name__ == "__main__":
-    unregister()
+    register()
 
 #bpy.ops.object.example_operator('INVOKE_DEFAULT')
