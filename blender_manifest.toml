@@ -1,0 +1,60 @@
+# This is so stupid. Extnesions are blender devs inhumanity in man.
+schema_version = "1.0.0"
+
+id = "EraserRadialController"
+version = "0.0.1"
+name = "Eraser Radial Controller"
+tagline = "Controls eraser size with just a hotkey, no switching needed. Set a keymap of gp.radialeraser to use" #Don't end with any punctuation
+maintainer = "Splits285 <splits285@gmail.com>"
+type = "add-on"
+
+
+
+website = "https://github.com/Splits285/blender-gpencil-eraser-radialcontroller"
+
+
+
+tags = ["Grease Pencil", "User Interface", "Animation"]
+
+#3D View
+#Add Curve
+#Add Mesh
+#Animation
+#Bake
+#Camera
+#Compositing
+#Development
+#Game Engine
+#Geometry Nodes
+#Grease Pencil
+#Import-Export
+#Lighting
+#Material
+#Modeling
+#Mesh
+#Node
+#Object
+#Paint
+#Pipeline
+#Physics
+#Render
+#Rigging
+#Scene
+#Sculpt
+#Sequencer
+#System
+#Text Editor
+#Tracking
+#User Interface
+#UV
+
+#This is forced to be 4.2.0 but most extensions will work in way way earlier blender versions
+blender_version_min = "4.2.0"
+# blender_version_max = "5.1.0"
+
+license = [
+  "SPDX:UNLICENSE",
+]
+
+# platforms = ["windows-amd64", "macos-arm64", "linux-x86_64"]
+# Other supported platforms: "windows-arm64", "macos-x86_64"
