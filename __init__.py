@@ -111,7 +111,10 @@ class Radialeraser(bpy.types.Operator):
         #print("Percentage", changePercentage)
         #print("Suggusting change of ", changeAMT)
         bpy.app.driver_namespace['changeAMT'] = changeAMT
-        bpy.app.driver_namespace['newAMT'] = changeAMT + bpy.context.tool_settings.gpencil_paint.brush.size
+        newAMT = changeAMT + bpy.context.tool_settings.gpencil_paint.brush.size
+        if newAMT < 1:
+            newAMT = 1
+        bpy.app.driver_namespace['newAMT'] = newAMT
                 
         #handling the text part
         context.area.tag_redraw()
