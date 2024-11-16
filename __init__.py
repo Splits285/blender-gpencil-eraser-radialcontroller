@@ -4,7 +4,7 @@ bl_info = {
     "name": "Eraser Radial Controller",
     "description": "Controls the size of the gpencil eraser like a radial control. Because blender won't give a data path for it to be targeted outside of eraser mode. Set a keymap for gp.radialeraser to use",
     "author": "Splits285",
-    "version": (0, 0, 2),
+    "version": (0, 0, 3),
     "blender": (3, 0, 0),
     "location": "Keymaps. Bind an option for gp.radialeraser",
     #"warning": "",
