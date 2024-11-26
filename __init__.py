@@ -4,7 +4,7 @@ bl_info = {
     "name": "Eraser Radial Controller",
     "description": "Controls the size of the gpencil eraser like a radial control. Because blender won't give a data path for it to be targeted outside of eraser mode. Set a keymap for gp.radialeraser to use",
     "author": "Splits285",
-    "version": (0, 0, 3),
+    "version": (0, 0, 4),
     "blender": (3, 0, 0),
     "location": "Keymaps. Bind an option for gp.radialeraser",
     #"warning": "",
@@ -21,11 +21,11 @@ import blf
 # https://blender.stackexchange.com/questions/244572/how-to-write-text-in-the-3d-viewport-as-statistics-does
 def draw_callback_px(self, context):
     font_id = 0 #default blender system font. This could be a TTF.
-    blf.enable(font_id, 5)
-    blf.shadow(font_id, 5, 1, 1, 1, 1)
-    blf.position(font_id, 100, 200, 0)
-    blf.size(font_id, 50)
-    blf.color(font_id, 0, 0, 0, 1)
+    blf.shadow(font_id, 5, 1, 1, 1, 150)
+    blf.position(font_id, 30, 200, 0)
+    blf.size(font_id, 40)
+    blf.color(font_id, 0, 0, 0, 100)
+    blf.enable(font_id,blf.SHADOW)
     blf.draw(font_id, "Eraser size: " + str(bpy.app.driver_namespace['newAMT']) )
 
 class Radialeraser(bpy.types.Operator):
