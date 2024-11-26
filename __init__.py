@@ -4,8 +4,8 @@ bl_info = {
     "name": "Eraser Radial Controller",
     "description": "Controls the size of the gpencil eraser like a radial control. Because blender won't give a data path for it to be targeted outside of eraser mode. Set a keymap for gp.radialeraser to use",
     "author": "Splits285",
-    "version": (0, 0, 3),
-    "blender": (3, 0, 0),
+    "version": (2, 0, 0),
+    "blender": (4, 3, 0),
     "location": "Keymaps. Bind an option for gp.radialeraser",
     #"warning": "",
     "doc_url": "https://github.com/addons/object/greasepencil_tools.html",
@@ -21,12 +21,14 @@ import blf
 # https://blender.stackexchange.com/questions/244572/how-to-write-text-in-the-3d-viewport-as-statistics-does
 def draw_callback_px(self, context):
     font_id = 0 #default blender system font. This could be a TTF.
-    blf.enable(font_id, 5)
-    blf.shadow(font_id, 5, 1, 1, 1, 1)
-    blf.position(font_id, 100, 200, 0)
-    blf.size(font_id, 50)
-    blf.color(font_id, 0, 0, 0, 1)
+    blf.shadow(font_id, 5, 1, 1, 1, 150)
+    blf.position(font_id, 30, 200, 0)
+    blf.size(font_id, 40)
+    blf.color(font_id, 0, 0, 0, 100)
+    blf.enable(font_id,blf.SHADOW)
     blf.draw(font_id, "Eraser size: " + str(bpy.app.driver_namespace['newAMT']) )
+    
+    
 
 class Radialeraser(bpy.types.Operator):
     bl_idname = "gp.radialeraser"
@@ -58,15 +60,6 @@ class Radialeraser(bpy.types.Operator):
     #---------------------------------------------------------------
         
     def invoke(self, context, event):
-        
-        #save current tool in driverspace to restore later.
-        current_active_tool = bpy.context.workspace.tools.from_space_view3d_mode(bpy.context.mode).idname
-        bpy.app.driver_namespace['Basetool'] = current_active_tool
-        #print("CURRENT ACTIVE TOOL BEFORE SWITCH = ",current_active_tool)
-        
-        #Change to eraser so it forces this change on the active eraser tool.
-        bpy.ops.wm.tool_set_by_id(name="builtin_brush.Erase")
-        
         
         #handles text##########################################
         args = (self, context)
@@ -111,7 +104,7 @@ class Radialeraser(bpy.types.Operator):
         #print("Percentage", changePercentage)
         #print("Suggusting change of ", changeAMT)
         bpy.app.driver_namespace['changeAMT'] = changeAMT
-        newAMT = changeAMT + bpy.context.tool_settings.gpencil_paint.brush.size
+        newAMT = changeAMT + bpy.context.tool_settings.gpencil_paint.eraser_brush.size
         if newAMT < 1:
             newAMT = 1
         bpy.app.driver_namespace['newAMT'] = newAMT
@@ -140,18 +133,16 @@ class Radialeraser(bpy.types.Operator):
             #    
             #print('FINISHED AFTER CALCULATIONS')
             #print('APPLYING SIZE CHANGE')
-            bpy.context.tool_settings.gpencil_paint.brush.size = bpy.app.driver_namespace['newAMT']
+            bpy.context.tool_settings.gpencil_paint.eraser_brush.size = bpy.app.driver_namespace['newAMT']
             #print('REMOVING TEXT HANDLER')
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
             #print('RESTORING TOOL')
-            bpy.ops.wm.tool_set_by_id(name=bpy.app.driver_namespace['Basetool'])
             return {'FINISHED'}
                 
 
         elif event.type == 'ESC':  # Capture exit event
             #print("Cancelled. Removing text handler, restoring tool")
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
-            bpy.ops.wm.tool_set_by_id(name=bpy.app.driver_namespace['Basetool'])
             return {'CANCELLED'}
         else:
             return {'PASS_THROUGH'}
@@ -159,7 +150,6 @@ class Radialeraser(bpy.types.Operator):
 
 def register():
     bpy.utils.register_class(Radialeraser)
-    bpy.app.driver_namespace['Basetool'] = "builtin_brush.Draw"
     bpy.app.driver_namespace['newAMT'] = 0
     bpy.app.driver_namespace['changeAMT'] = 0
     bpy.app.driver_namespace['Diff'] = 0
@@ -168,7 +158,6 @@ def register():
 
 def unregister():
     bpy.utils.unregister_class(Radialeraser)
-    del bpy.app.driver_namespace['Basetool']
     del bpy.app.driver_namespace['newAMT']
     del bpy.app.driver_namespace['changeAMT']
     del bpy.app.driver_namespace['Diff']
@@ -178,4 +167,4 @@ def unregister():
 if __name__ == "__main__":
     register()
 
-#bpy.ops.object.example_operator('INVOKE_DEFAULT')
+#bpy.ops.gp.radialeraser('INVOKE_DEFAULT')
