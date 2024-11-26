@@ -2,7 +2,7 @@
 schema_version = "1.0.0"
 
 id = "EraserRadialController"
-version = "0.0.3"
+version = "0.0.4"
 name = "Eraser Radial Controller"
 tagline = "Controls eraser size with just a hotkey, no switching needed. Set a keymap of gp.radialeraser to use" #Don't end with any punctuation
 maintainer = "Splits285 <splits285@gmail.com>"
